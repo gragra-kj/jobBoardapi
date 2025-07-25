@@ -5,4 +5,10 @@ from rest_framework.routers import DefaultRouter
 
 router=DefaultRouter()
 
-router.
+router.register('jobs',JobViewSet)
+router.register('application',ApplicationViewset)
+router.register('company',CompanyViewSet)
+
+urlpatterns=[
+    path('',include(router.urls))
+]
