@@ -41,6 +41,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'drf_spectacular',
     'rest_framework.authtoken',
+    'oauth2_provider',
+    
 
 ]
 
@@ -86,8 +88,19 @@ DATABASES = {
 }
 REST_FRAMEWORK = {
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
-    # other DRF settings if any...
+    
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        #'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.BasicAuthentication',
+        'oauth2_provider.contrib.rest_framework.OAuth2Authentication',
+        'rest_framework.authentication.TokenAuthentication',
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ]
 }
+    # other DRF settings if any...
+
 
 
 SPECTACULAR_SETTINGS = {
@@ -95,6 +108,9 @@ SPECTACULAR_SETTINGS = {
     'DESCRIPTION': 'API for job listings and applications.',
     'VERSION': '1.0.0',
 }
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
+)
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
