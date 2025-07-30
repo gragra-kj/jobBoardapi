@@ -1,7 +1,7 @@
 from django.shortcuts import render
 
 # Create your views here.
-from rest_framework import viewsets,permissions
+from rest_framework import viewsets,permissions,filters
 from .serializer import ApplicationSerializer,JobSerializer,CompanySerializer
 from .models import ApplicationModel,JobModel,CompanyProfile
 from django.contrib.auth.models import User
@@ -10,6 +10,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
 from django.contrib.auth import authenticate
+from django_filters.rest_framework import DjangoFilterBackend
 
 #register
 
@@ -53,6 +54,17 @@ class JobViewSet(viewsets.ModelViewSet):
     #queryset=JobModel.objects.all()
     serializer_class=JobSerializer
     permission_classes=[permissions.IsAuthenticatedOrReadOnly]
+    filter_backends=[DjangoFilterBackend,filters.SearchFilter,filters.OrderingFilter]
+    
+    filterset_fields = ['company', 'location', 'type']  # Customize based on your model fields
+
+    # For SearchFilter
+    search_fields = ['title', 'description', 'company__name']
+
+    # For OrderingFilter
+    ordering_fields = ['created_at', 'title']  # allow client to order by these
+    ordering = ['-created_at']  # default ordering
+    
     def get_queryset(self):
         return JobModel.objects.filter(posted_by=self.request.user)
 
