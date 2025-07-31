@@ -56,15 +56,12 @@ class JobViewSet(viewsets.ModelViewSet):
     permission_classes=[permissions.IsAuthenticatedOrReadOnly]
     filter_backends=[DjangoFilterBackend,filters.SearchFilter,filters.OrderingFilter]
     
-    filterset_fields = ['company', 'location', 'type']  # Customize based on your model fields
-
-    # For SearchFilter
-    search_fields = ['title', 'description', 'company__name']
+    filterset_fields = [ 'location', 'title','job_type'] 
+    search_fields = ['title', 'description', 'company_name']
 
     # For OrderingFilter
-    ordering_fields = ['created_at', 'title']  # allow client to order by these
-    ordering = ['-created_at']  # default ordering
-    
+    ordering_fields = ['posted_at', 'title']  
+    ordering = ['-posted_at'] 
     def get_queryset(self):
         return JobModel.objects.filter(posted_by=self.request.user)
 
